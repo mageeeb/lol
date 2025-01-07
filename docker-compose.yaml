@@ -1,3 +1,56 @@
+#services:
+#  mysql:
+#    image: mysql:8.0
+#    restart: on-failure
+#    environment:
+#      MYSQL_ROOT_PASSWORD: root
+#      MYSQL_DATABASE: eleve
+#    ports:
+#      - 3307:3306
+#    volumes:
+#      - mysql_data:/var/lib/mysql
+#    networks:
+#      - app-network
+#
+#  phpmyadmin:
+#    image: phpmyadmin/phpmyadmin
+#    environment:
+#      PMA_HOST: mysql
+#    ports:
+#      - "8081:80"
+#    depends_on:
+#      - mysql
+#    networks:
+#      - app-network
+#
+#  nginx:
+#    image: nginx:latest
+#    ports:
+#      - "8080:80"
+#    volumes:
+#      - './:/usr/src/app'
+#      - './docker/nginx:/etc/nginx/conf.d/'
+#    depends_on:
+#      - php
+#    networks:
+#      - app-network
+#
+#  php:
+#    build:
+#      context: .
+#      dockerfile: ./docker/php/Dockerfile
+#    volumes:
+#      - './:/usr/src/app'
+#    restart: on-failure
+#    env_file:
+#      - .env
+#    networks:
+#      - app-network
+#
+#volumes:
+#  mysql_data:
+#networks:
+#  app-network:
 services:
   mysql:
     image: mysql:8.0
@@ -28,8 +81,9 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - './:/usr/src/app'
+      - './:/usr/src/app'                  # Symfony projet local
       - './docker/nginx:/etc/nginx/conf.d/'
+      - './public/uploads:/usr/src/app/public/uploads' # Volume pour uploads (avatars)
     depends_on:
       - php
     networks:
@@ -40,10 +94,13 @@ services:
       context: .
       dockerfile: ./docker/php/Dockerfile
     volumes:
-      - './:/usr/src/app'
+      - './:/usr/src/app'                  # Symfony projet local
+      - './public/uploads:/usr/src/app/public/uploads' # Volume pour uploads (avatars)
     restart: on-failure
-    env_file:
-      - .env
+#    env_file:
+#      - .env
+    environment:
+      DATABASE_URL: "mysql://root:root@mysql:3306/eleve?serverVersion=8.0.32&charset=utf8mb4"
     networks:
       - app-network
 
