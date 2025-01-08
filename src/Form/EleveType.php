@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Form\NoteType;
 use App\Entity\Eleve;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -22,9 +23,7 @@ class EleveType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-//            ->add('nom', TextType::class, [
-//                'attr' => ['placeholder' => 'Entrez le nom']
-//            ])
+
             ->add('nom', TextType::class, [
                 'required' => true,
                 'label' => 'Nom',
@@ -98,16 +97,7 @@ class EleveType extends AbstractType
                     ])
                 ],
             ])
-//            ->add('notes', CollectionType::class, [
-//                'entry_type' => NoteType::class,
-//                'allow_add' => true,
-//                'allow_delete' => true,
-//                'by_reference' => false,
-//                'prototype' => true,
-//                'attr' => [
-//                    'class' => 'notes-collection'
-//                ]
-//            ])
+//
             ->add('notes', CollectionType::class, [
                 'entry_type' => NoteType::class,
                 'allow_add' => true,
@@ -118,19 +108,7 @@ class EleveType extends AbstractType
                     'class' => 'notes-collection'
                 ]
             ])
-          /* ->add('notes', NoteType::class, [
-                'label' => false,
 
-
-                'entry_type' => NumberType::class,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-                //'prototype' => true,
-                'attr' => [
-                    'class' => 'notes-collection'
-                ]
-            ])*/
             ->add('save', SubmitType::class, [
                 'label' => 'Enregistrer',
                 'attr' => ['class' => 'btn btn-primary']

@@ -7,6 +7,10 @@ parameters:
     avatars_directory: '%kernel.project_dir%/public/uploads/avatars'
 services:
     # default configuration for services in *this* file
+    App\Form\:
+        resource: '../src/Form'
+        tags: ['form.type']
+
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.

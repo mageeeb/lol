@@ -68,51 +68,6 @@ class EleveController extends AbstractController
     {
         $eleve = new Eleve();
         $form = $this->createForm(EleveType::class, $eleve);
-
-//        $form->handleRequest($request); // Gère la soumission du formulaire
-//
-//        // Vérification de la soumission et de sa validité
-//        if ($form->isSubmitted() && !$form->isValid()) {
-//            $errors = $form->getErrors(true, false);
-//            foreach ($form->getErrors(true, false) as $error) {
-//                dump($error->getMessage());
-//            }
-//            $this->addFlash('error', 'Le formulaire contient des erreurs.');
-//        }
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            // Gestion de l'upload de l'avatar
-//            $avatarFile = $form->get('avatar')->getData();
-//
-//            if ($avatarFile) {
-//                $originalFilename = pathinfo($avatarFile->getClientOriginalName(), PATHINFO_FILENAME);
-//                $safeFilename = $slugger->slug($originalFilename);
-//                $newFilename = $safeFilename . '-' . uniqid() . '.' . $avatarFile->guessExtension();
-//
-//                try {
-//                    $avatarFile->move(
-//                        $this->getParameter('avatars_directory'),
-//                        $newFilename
-//                    );
-//                } catch (FileException $e) {
-//                    $this->addFlash('error', 'Erreur lors de l\'upload de la photo.');
-//                    return $this->redirectToRoute('eleve_new');
-//                }
-//
-//                $eleve->setAvatar($newFilename);
-//            }
-//
-//            // Persiste et sauvegarde en base de données
-//            $entityManager->persist($eleve);
-//            $entityManager->flush(); // N'oubliez pas de flusher !
-//
-//            $this->addFlash('success', 'Élève ajouté avec succès.');
-//            return $this->redirectToRoute('eleve_list');
-//        }
-//
-//        return $this->render('eleve/new.html.twig', [
-//            'form' => $form->createView(),
-//        ]);
         $form->handleRequest($request); // Gère la soumission du formulaire
 
         // Vérification des erreurs si le formulaire n'est pas valide
