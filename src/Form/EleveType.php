@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Form;
-
+use App\Entity\Matiere;
 use App\Form\NoteType;
 use App\Entity\Eleve;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 
 class EleveType extends AbstractType
@@ -83,6 +84,11 @@ class EleveType extends AbstractType
                     'Classe 2' => 'C2'
                 ]
             ])
+            // Ajout du bouton de soumission "save"
+            ->add('save', SubmitType::class, [
+                'label' => 'Enregistrer',
+                'attr' => ['class' => 'btn btn-primary']
+            ])
             ->add('avatar', FileType::class, [
                 'mapped' => false,
                 'required' => false,
@@ -98,22 +104,41 @@ class EleveType extends AbstractType
                     ])
                 ],
             ])
+            ->add('matiere', EntityType::class, [
+                'class' => Matiere::class, // L’entité correspondante
+                'choice_label' => 'nom',  // Affiche le champ `nom` dans la liste déroulante
+                'placeholder' => 'Sélectionnez une matière',
+                'required' => false,      // Facultatif si la jointure est nullable
+            ])
 //
+//            ->add('notes', CollectionType::class, [
+//                'entry_type' => NoteType::class,
+//                'allow_add' => true,
+//                'allow_delete' => true,
+//                'by_reference' => false,
+//                'prototype' => true,
+//                'attr' => [
+//                    'class' => 'notes-collection'
+//                ]
+//            ])
+//            ->add('notes', CollectionType::class, [
+//                'entry_type' => NoteType::class,    // Un formulaire spécifique pour gérer `Note`
+//                'allow_add' => true,               // Autorise l’ajout de nouvelles notes
+//                'allow_delete' => true,            // Autorise la suppression des notes
+//                'by_reference' => false,           // Important pour les relations OneToMany
+//            ])
+//
+//            ->add('save', SubmitType::class, [
+//                'label' => 'Enregistrer',
+//                'attr' => ['class' => 'btn btn-primary']
+//            ])
             ->add('notes', CollectionType::class, [
-                'entry_type' => NoteType::class,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-                'prototype' => true,
-                'attr' => [
-                    'class' => 'notes-collection'
-                ]
-            ])
-
-            ->add('save', SubmitType::class, [
-                'label' => 'Enregistrer',
-                'attr' => ['class' => 'btn btn-primary']
-            ])
+                'entry_type' => NoteType::class, // Utilise NoteType pour chaque élément de la collection
+                'allow_add' => true, // Autoriser l'ajout dynamique d'éléments
+                'allow_delete' => true, // Autoriser la suppression
+                'by_reference' => false, // Pour gérer correctement la relation OneToMany
+                'label' => 'Notes',
+            ]);
         ;
     }
 

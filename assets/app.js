@@ -19,3 +19,22 @@ console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 }
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    const collectionHolder = document.querySelector('#notes-collection');
+    const addButton = document.querySelector('#add-note-btn');
+    let index = collectionHolder.children.length;
+
+    // Ajoute un événement au bouton "Ajouter une note"
+    addButton.addEventListener('click', () => {
+        const prototype = collectionHolder.dataset.prototype;
+        const newForm = prototype.replace(/__name__/g, index);
+
+        const newFormItem = document.createElement('div');
+        newFormItem.classList.add('note-item', 'mb-3');
+        newFormItem.innerHTML = newForm;
+
+        collectionHolder.appendChild(newFormItem);
+        index++;
+    });
+});
+

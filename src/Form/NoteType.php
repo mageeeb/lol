@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Matiere;
 use App\Entity\Note;
 use Doctrine\DBAL\Types\FloatType;
 use Symfony\Component\Form\AbstractType;

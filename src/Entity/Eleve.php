@@ -17,7 +17,7 @@ class Eleve
         type: 'integer',
         options: ['unsigned' => true],
     )]
-    private ?int $id = null;
+    private ?int $id;
 
     #[ORM\Column(length: 100)]
     private ?string $nom = null;
@@ -54,6 +54,14 @@ class Eleve
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
+
+//    #[ORM\ManyToOne(targetEntity: Matiere::class)]
+//    #[ORM\JoinColumn(nullable: true)] // nullable: true si une matière peut ne pas être assignée
+//    private ?Matiere $matiere = null;
+    #[ORM\ManyToOne(targetEntity: Matiere::class)]
+    #[ORM\JoinColumn(name: 'matiere_id', referencedColumnName: 'id', nullable: true)]
+    private ?Matiere $matiere = null;
+
 
     public function __construct()
     {
@@ -171,6 +179,18 @@ class Eleve
     public function setEmail(string $email): static
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getMatiere(): ?Matiere
+    {
+        return $this->matiere;
+    }
+
+    public function setMatiere(?Matiere $matiere): self
+    {
+        $this->matiere = $matiere;
 
         return $this;
     }
