@@ -85,6 +85,35 @@
                     <i class="fa-solid fa-arrow-left"></i> Retour à la liste
                 </a>
             </div>
+            <div class="container mt-5">
+                <h1>Notes de {{ eleve.prenom }} {{ eleve.nom }}</h1>
+
+                <a href="{{ path('note_new', { id: eleve.id }) }}" class="btn btn-success mb-3">Ajouter une note</a>
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Matière</th>
+                        <th>Note</th>
+                        <th>Supprimer</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for note in notes %}
+                        <tr>
+                            <td>{{ note.matiere.nom }}</td>
+                            <td>{{ note.note }}</td>
+                            <td>
+                                <form method="post" action="{{ path('note_delete', { id: note.id }) }}">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete-note' ~ note.id) }}">
+                                    <button class="btn btn-danger btn-sm">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </section>
 {% endblock %}

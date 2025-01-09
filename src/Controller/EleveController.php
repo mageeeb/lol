@@ -34,6 +34,86 @@ class EleveController extends AbstractController
             'nomStagiaire' => $stagiaire->getNom(),
         ]);
     }
+    //----------------
+//    #[Route('/eleve/{id}/notes/new', name: 'note_new', methods: ['GET', 'POST'])]
+//    public function addNote(
+//        Eleve $eleve,
+//        Request $request,
+//        EntityManagerInterface $entityManager
+//    ): Response {
+//        $note = new \App\Entity\Note(); // Crée une nouvelle instance de Note
+//        $note->setEleve($eleve); // Associe la note à l'élève spécifique
+//
+//        $form = $this->createForm(NoteType::class, $note); // Utilise le formulaire NoteType
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $entityManager->persist($note); // Persiste la nouvelle note
+//            $entityManager->flush();
+//
+//            $this->addFlash('success', 'La note a été ajoutée avec succès.');
+//
+//            return $this->redirectToRoute('eleve_show', ['id' => $eleve->getId()]);
+//        }
+//
+//        return $this->render('note/new.html.twig', [
+//            'form' => $form->createView(),
+//            'eleve' => $eleve,
+//        ]);
+//    }
+//    #[Route('/eleve/{id}/notes/new', name: 'note_new', methods: ['GET', 'POST'])]
+//    public function addNote(
+//        Eleve $eleve,
+//        Request $request,
+//        EntityManagerInterface $entityManager
+//    ): Response {
+//        $note = new \App\Entity\Note(); // Crée une nouvelle instance de Note
+//        $note->setEleve($eleve); // Associe la note à l'élève spécifique
+//
+//        $form = $this->createForm(NoteType::class, $note);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $entityManager->persist($note);
+//            $entityManager->flush();
+//
+//            $this->addFlash('success', 'La note a été ajoutée avec succès.');
+//
+//            return $this->redirectToRoute('eleve_show', ['id' => $eleve->getId()]);
+//        }
+//
+//        return $this->render('eleve/new.html.twig', [
+//            'form' => $form->createView(),
+//            'eleve' => $eleve, // Passe l'objet eleve à la vue
+//        ]);
+//    }
+    #[Route('/eleve/{id}/notes/new', name: 'note_new', methods: ['GET', 'POST'])]
+    public function addNote(
+        Eleve $eleve,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $note = new \App\Entity\Note(); // Crée une nouvelle instance de Note
+        $note->setEleve($eleve); // Associe la note à l'élève spécifique
+
+        $form = $this->createForm(NoteType::class, $note); // Utilise le formulaire NoteType
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($note); // Enregistre la nouvelle note
+            $entityManager->flush();
+
+            $this->addFlash('success', 'La note a été ajoutée avec succès.');
+
+            return $this->redirectToRoute('eleve_show', ['id' => $eleve->getId()]);
+        }
+
+        return $this->render('note/new.html.twig', [
+            'form' => $form->createView(),
+            'eleve' => $eleve, // Passe l'objet eleve à la vue
+        ]);
+    }
+    //------
 
     // Méthode pour afficher un élève spécifique
     #[Route('/eleve/{id}', name: 'eleve_show', requirements: ['id' => '\d+'])]
@@ -44,6 +124,39 @@ class EleveController extends AbstractController
         ]);
 
     }
+    //----------------
+    #[Route('/eleve/{id}/notes', name: 'note_list', methods: ['GET'])]
+    public function listNotes(
+        Eleve $eleve,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $notes = $entityManager->getRepository(\App\Entity\Note::class)
+            ->findBy(['eleve' => $eleve]); // Récupère les notes associées à l'élève
+
+        return $this->render('eleve/notes.html.twig', [
+            'eleve' => $eleve,
+            'notes' => $notes,
+        ]);
+    }
+    //----------------
+    #[Route('/eleve/notes/{id}/delete', name: 'note_delete', methods: ['POST'])]
+    public function deleteNote(
+        \App\Entity\Note $note,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response {
+        // Vérifie le token CSRF pour valider la suppression
+        if ($this->isCsrfTokenValid('delete-note' . $note->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($note);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'La note a été supprimée avec succès.');
+        }
+
+        return $this->redirectToRoute('note_list', ['id' => $note->getEleve()->getId()]);
+    }
+    //------------------
+
 
     // Méthode pour la liste des élèves
     #[Route('/eleve', name: 'eleve_list')]

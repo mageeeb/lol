@@ -79,6 +79,20 @@
                             {{ form_row(form.classe, {'label': 'Classe', 'attr': {'class': 'form-control'}}) }}
                         </div>
                     </div>
+                    {{ form_start(form) }}
+                    <div class="mb-3">
+                        {{ form_label(form.matiere) }}
+                        {{ form_widget(form.matiere, {'attr': {'class': 'form-select'}}) }}
+                        {{ form_errors(form.matiere) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_label(form.note) }}
+                        {{ form_widget(form.note, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.note) }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                    {{ form_end(form) }}
+                    </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             {{ form_row(form.avatar, {'label': 'Avatar', 'attr': {'class': 'form-control'}}) }}
