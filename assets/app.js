@@ -38,3 +38,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    const addNoteButton = document.querySelector('.add-note-btn');
+    const notesCollection = document.getElementById('notes-collection');
+    let index = notesCollection.children.length;
+
+    addNoteButton.addEventListener('click', function() {
+        const prototype = notesCollection.dataset.prototype;
+        const newForm = prototype.replace(/__name__/g, index);
+        const newFormElement = document.createElement('div');
+        newFormElement.innerHTML = newForm;
+        notesCollection.appendChild(newFormElement);
+        index++;
+    });
+});
+

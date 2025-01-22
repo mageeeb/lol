@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une Note{% endblock %}
+
+{% block body %}
+<h2>Notes de {{ eleve.prenom }} {{ eleve.nom }}</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Matière</th>
+            <th>Note</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for note in eleve.notes %}
+            <tr>
+                <td>{{ note.matiere.nom }}</td>
+                <td>{{ note.note }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">Aucune note enregistrée.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+    <div class="container mt-5">
+        <h1>Ajouter une note pour {{ eleve.prenom }} {{ eleve.nom }}</h1>
+
+        {{ form_start(form) }}
+            <div class="form-group">
+                {{ form_label(form.matiere) }}
+                {{ form_widget(form.matiere, { 'attr': {'class': 'form-control'} }) }}
+                {{ form_errors(form.matiere) }}
+            </div>
+
+            <div class="form-group mt-3">
+                {{ form_label(form.note) }}
+                {{ form_widget(form.note, { 'attr': {'class': 'form-control', 'placeholder': 'Entrez la note'} }) }}
+                {{ form_errors(form.note) }}
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-4">Enregistrer</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

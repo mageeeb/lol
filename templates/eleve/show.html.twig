@@ -1,154 +1,3 @@
-{#{% extends 'base.html.twig' %}#}
-{#{% set exclude_temoignage = true %}#}
-{#{% set exclude_teams = true %}#}
-
-{#{% block title %}Détails de l'élève{% endblock %}#}
-
-
-{#{% block body %}#}
-{#    <section class="about spad py-5">#}
-{#        <!-- Breadcrumb -->#}
-{#        <div class="breadcrumb-option spad set-bg" data-setbg="img/breadcrumb-bg.jpg">#}
-{#            <div class="container">#}
-{#                <div class="row">#}
-{#                    <div class="col-lg-12 text-center">#}
-{#                        <div class="breadcrumb__text">#}
-{#                            <h1 class="text-uppercase">{{ eleve.nom }} {{ eleve.prenom }}</h1>#}
-{#                            <p class="breadcrumb-links mt-2">#}
-{#                                <a href="{{ path('app_homepage') }}" class="text-decoration-none text-light">Accueil</a>#}
-{#                                <span class="ml-2">/</span>#}
-{#                                <span class="text-primary ml-2">{{ eleve.prenom }}</span>#}
-{#                            </p>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#        <!-- End Breadcrumb -->#}
-
-{#        <div class="container mt-5">#}
-{#            <h2 class="text-center mb-5">Détails du Stagiaire</h2>#}
-
-{#            <div class="row align-items-center">#}
-{#                <!-- Avatar -->#}
-{#                <div class="col-md-4 text-center mb-4">#}
-{#                    {% if eleve.avatar %}#}
-{#                        <img src="{{ asset('uploads/avatars/' ~ eleve.avatar) }}" alt="Avatar de {{ eleve.nom }}" class="rounded-circle img-fluid shadow-sm" style="width: 200px; height: 200px; object-fit: cover;">#}
-{#                    {% else %}#}
-{#                        <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center shadow-sm" style="width: 200px; height: 200px;">#}
-{#                            <p class="text-light m-0">Aucun Avatar</p>#}
-{#                        </div>#}
-{#                    {% endif %}#}
-{#                </div>#}
-
-{#                <!-- Informations détaillées -->#}
-{#                <div class="col-md-8">#}
-{#                    <div class="eleve-details shadow-sm p-4 bg-light rounded">#}
-{#                        <dl class="row">#}
-{#                            <dt class="col-sm-4 text-primary">Nom :</dt>#}
-{#                            <dd class="col-sm-8">{{ eleve.nom ?? 'Non spécifié' }}</dd>#}
-
-{#                            <dt class="col-sm-4 text-primary">Prénom :</dt>#}
-{#                            <dd class="col-sm-8">{{ eleve.prenom ?? 'Non spécifié' }}</dd>#}
-
-{#                            <dt class="col-sm-4 text-primary">Email :</dt>#}
-{#                            <dd class="col-sm-8">#}
-{#                                {% if eleve.email %}#}
-{#                                    <a href="mailto:{{ eleve.email }}" class="text-decoration-none text-dark">{{ eleve.email }}</a>#}
-{#                                {% else %}#}
-{#                                    Non spécifié#}
-{#                                {% endif %}#}
-{#                            </dd>#}
-
-{#                            <dt class="col-sm-4 text-primary">Âge :</dt>#}
-{#                            <dd class="col-sm-8">{{ eleve.age is not null ? eleve.age ~ ' ans' : 'Non spécifié' }}</dd>#}
-
-{#                            <dt class="col-sm-4 text-primary">Classe :</dt>#}
-{#                            <dd class="col-sm-8">{{ eleve.classe ?? 'Non spécifiée' }}</dd>#}
-{#                        </dl>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-
-{#            <!-- Actions -->#}
-{#            <div class="eleve-actions text-center mt-5">#}
-{#                <a href="{{ path('eleve_new', {'id': eleve.id}) }}" class="btn btn-warning mx-2">#}
-{#                    <i class="fa-solid fa-pen"></i> Modifier#}
-{#                </a>#}
-{#                <form method="post" action="{{ path('eleve_delete', {'id': eleve.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élève ?');">#}
-{#                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ eleve.id) }}">#}
-{#                    <button class="btn btn-danger mx-2">#}
-{#                        <i class="fa-solid fa-trash"></i> Supprimer#}
-{#                    </button>#}
-{#                </form>#}
-{#                <a href="{{ path('eleve_list') }}" class="btn btn-secondary mx-2">#}
-{#                    <i class="fa-solid fa-arrow-left"></i> Retour à la liste#}
-{#                </a>#}
-{#            </div>#}
-{#            <div class="container mt-5">#}
-{#                <h1>Notes de {{ eleve.prenom }} {{ eleve.nom }}</h1>#}
-
-{#                <a href="{{ path('note_new', { id: eleve.id }) }}" class="btn btn-success mb-3">Ajouter une note</a>#}
-
-{#                <table class="table table-striped">#}
-{#                    <thead>#}
-{#                    <tr>#}
-{#                        <th>Matière</th>#}
-{#                        <th>Note</th>#}
-{#                        <th>Supprimer</th>#}
-{#                    </tr>#}
-{#                    </thead>#}
-{#                    <tbody>#}
-{#                    {% for note in notes %}#}
-{#                        <tr>#}
-{#                            <td>{{ note.matiere.nom }}</td>#}
-{#                            <td>{{ note.note }}</td>#}
-{#                            <td>#}
-{#                                <form method="post" action="{{ path('note_delete', { id: note.id }) }}">#}
-{#                                    <input type="hidden" name="_token" value="{{ csrf_token('delete-note' ~ note.id) }}">#}
-{#                                    <button class="btn btn-danger btn-sm">Supprimer</button>#}
-{#                                </form>#}
-{#                            </td>#}
-{#                        </tr>#}
-{#            <div class="container mt-5">#}
-{#                <h1>Notes de {{ eleve.prenom }} {{ eleve.nom }}</h1>#}
-
-{#                <a href="{{ path('note_new', { id: eleve.id }) }}" class="btn btn-success mb-3">Ajouter une note</a>#}
-
-{#                <table class="table table-striped">#}
-{#                    <thead>#}
-{#                    <tr>#}
-{#                        <th>Matière</th>#}
-{#                        <th>Note</th>#}
-{#                    </tr>#}
-{#                    </thead>#}
-{#                    <tbody>#}
-{#                    {% if notes is defined %}#}
-{#                        {% for note in notes %}#}
-{#                            <tr>#}
-{#                                <td>{{ note.matiere.nom }}</td>#}
-{#                                <td>{{ note.note }}</td>#}
-{#                            </tr>#}
-{#                        {% else %}#}
-{#                            <tr>#}
-{#                                <td colspan="2">Aucune note disponible.</td>#}
-{#                            </tr>#}
-{#                        {% endfor %}#}
-{#                    {% else %}#}
-{#                        <tr>#}
-{#                            <td colspan="2">Les notes ne sont pas disponibles.</td>#}
-{#                        </tr>#}
-{#                    {% endif %}#}
-{#                    </tbody>#}
-{#                </table>#}
-{#            </div>#}
-{#                    {% endfor %}#}
-{#                    </tbody>#}
-{#                </table>#}
-{#            </div>#}
-{#        </div>#}
-{#    </section>#}
-{#{% endblock %}#}
 {% extends 'base.html.twig' %}
 {% set exclude_temoignage = true %}
 {% set exclude_teams = true %}
@@ -163,7 +12,7 @@
                 <div class="row">
                     <div class="col-lg-12 text-center">
                         <div class="breadcrumb__text">
-                            <h1 class="text-uppercase">{{ eleve.nom }} {{ eleve.prenom }}</h1>
+                            <h1 class="text-uppercase">{{ eleve.prenom }} {{ eleve.nom }}</h1>
                             <p class="breadcrumb-links mt-2">
                                 <a href="{{ path('app_homepage') }}" class="text-decoration-none text-light">Accueil</a>
                                 <span class="ml-2">/</span>
@@ -243,7 +92,7 @@
 
                 <table class="table table-striped">
                     <thead>
-                    <tr>
+                    <tr class="text-light">
                         <th>Matière</th>
                         <th>Note</th>
                     </tr>

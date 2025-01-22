@@ -35,58 +35,7 @@ class EleveController extends AbstractController
         ]);
     }
     //----------------
-//    #[Route('/eleve/{id}/notes/new', name: 'note_new', methods: ['GET', 'POST'])]
-//    public function addNote(
-//        Eleve $eleve,
-//        Request $request,
-//        EntityManagerInterface $entityManager
-//    ): Response {
-//        $note = new \App\Entity\Note(); // Crée une nouvelle instance de Note
-//        $note->setEleve($eleve); // Associe la note à l'élève spécifique
-//
-//        $form = $this->createForm(NoteType::class, $note); // Utilise le formulaire NoteType
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $entityManager->persist($note); // Persiste la nouvelle note
-//            $entityManager->flush();
-//
-//            $this->addFlash('success', 'La note a été ajoutée avec succès.');
-//
-//            return $this->redirectToRoute('eleve_show', ['id' => $eleve->getId()]);
-//        }
-//
-//        return $this->render('note/new.html.twig', [
-//            'form' => $form->createView(),
-//            'eleve' => $eleve,
-//        ]);
-//    }
-//    #[Route('/eleve/{id}/notes/new', name: 'note_new', methods: ['GET', 'POST'])]
-//    public function addNote(
-//        Eleve $eleve,
-//        Request $request,
-//        EntityManagerInterface $entityManager
-//    ): Response {
-//        $note = new \App\Entity\Note(); // Crée une nouvelle instance de Note
-//        $note->setEleve($eleve); // Associe la note à l'élève spécifique
-//
-//        $form = $this->createForm(NoteType::class, $note);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $entityManager->persist($note);
-//            $entityManager->flush();
-//
-//            $this->addFlash('success', 'La note a été ajoutée avec succès.');
-//
-//            return $this->redirectToRoute('eleve_show', ['id' => $eleve->getId()]);
-//        }
-//
-//        return $this->render('eleve/new.html.twig', [
-//            'form' => $form->createView(),
-//            'eleve' => $eleve, // Passe l'objet eleve à la vue
-//        ]);
-//    }
+
     #[Route('/eleve/{id}/notes/new', name: 'note_new', methods: ['GET', 'POST'])]
     public function addNote(
         Eleve $eleve,
@@ -108,7 +57,7 @@ class EleveController extends AbstractController
             return $this->redirectToRoute('eleve_show', ['id' => $eleve->getId()]);
         }
 
-        return $this->render('note/new.html.twig', [
+        return $this->render('eleve/notes/new.html.twig', [
             'form' => $form->createView(),
             'eleve' => $eleve, // Passe l'objet eleve à la vue
         ]);

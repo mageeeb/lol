@@ -53,58 +53,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 //        $builder
 //            ->add('eleve', EntityType::class, [
 //                'class' => \App\Entity\Eleve::class, // Classe associée à l'entité Eleve
-//                'choice_label' => 'nom', // Afficher le nom de l'élève
-//                'label' => 'Élève',
-//                'placeholder' => 'Sélectionnez un élève', // Placeholder par défaut
-//            ])
-//            ->add('matiere', EntityType::class, [
-//                'class' => \App\Entity\Matiere::class, // Classe associée à l'entité Matiere
-//                'choice_label' => 'nom', // La propriété utilisée comme label dans les choix
-//                'label' => 'Matière',
-//                'placeholder' => 'Sélectionnez une matière',
-//            ])
-//            ->add('note', NumberType::class, [
-//                'label' => 'Note',
-//                'attr' => [
-//                    'min' => 0, // Valeur minimale
-//                    'max' => 20, // Valeur maximale
-//                ]
-//            ]);
-//    }
-//
-//    public function configureOptions(OptionsResolver $resolver): void
-//    {
-//        $resolver->setDefaults([
-//            'data_class' => Note::class, // La classe de données associée
-//        ]);
-//    }
-//}
-//class NoteType extends AbstractType
-//{
-//    public function buildForm(FormBuilderInterface $builder, array $options): void
-//    {
-//        $builder
-//            ->add('matiere', ChoiceType::class, [
-//                'choices' => [
-//                    'Mathématiques' => 'maths',
-//                    'Physique' => 'physique',
-//                    'Informatique' => 'informatique',
-//                ],
-//                'label' => 'Matière',
-//            ])
-//            ->add('note', NumberType::class, [
-//                'label' => 'Note',
-//                'attr' => ['min' => 0, 'max' => 20],
-//            ]);
-//    }
-//
-//    public function configureOptions(OptionsResolver $resolver): void
-//    {
-//        $resolver->setDefaults([
-//            'data_class' => Note::class, // Le formulaire est lié à l'entité Note
-//        ]);
-//    }
-//}
+
 class NoteType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
