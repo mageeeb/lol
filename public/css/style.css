@@ -1158,6 +1158,9 @@ section.hero {
 .testimonial {
   padding-bottom: 60px;
 }
+.bgcouleur{
+  background: #100028
+}
 
 .testimonial__slider.owl-carousel .owl-item .col-lg-4 {
   max-width: 100%;

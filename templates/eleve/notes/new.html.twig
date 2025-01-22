@@ -1,30 +1,11 @@
 {% extends 'base.html.twig' %}
+{% set exclude_temoignage = true %}
+{% set exclude_teams = true %}
 
 {% block title %}Ajouter une Note{% endblock %}
 
 {% block body %}
-<h2>Notes de {{ eleve.prenom }} {{ eleve.nom }}</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Matière</th>
-            <th>Note</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for note in eleve.notes %}
-            <tr>
-                <td>{{ note.matiere.nom }}</td>
-                <td>{{ note.note }}</td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="2">Aucune note enregistrée.</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
+<section class="about spad">
     <div class="container mt-5">
         <h1>Ajouter une note pour {{ eleve.prenom }} {{ eleve.nom }}</h1>
 
@@ -44,4 +25,107 @@
             <button type="submit" class="btn btn-primary mt-4">Enregistrer</button>
         {{ form_end(form) }}
     </div>
+</section>
+
+<!-- Testimonial Section Begin -->
+<section class="bgcouleur">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title center-title">
+                    <span>Ils témoignent</span>
+                    <h2 class="text-light">Qu'est-ce qu'ils pensent?</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="testimonial__slider owl-carousel">
+                <div class="col-lg-4">
+                    <div class="testimonial__item">
+                        <div class="testimonial__text">
+                            <p>Delivers such a great service that it can benefit all kinds of people from any number
+                                of industries.</p>
+                        </div>
+                        <div class="testimonial__author">
+                            <div class="testimonial__author__pic">
+                                <img src="img/testimonial/ta-1.jpg" alt="">
+                            </div>
+                            <div class="testimonial__author__text">
+                                <h5>Krista Attorn</h5>
+                                <span>Web Designer</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="testimonial__item">
+                        <div class="testimonial__text">
+                            <p>Excellente expérience. La formation ma permise de me démarquer des autres.</p>
+                        </div>
+                        <div class="testimonial__author">
+                            <div class="testimonial__author__pic">
+                                <img src="img/testimonial/ta-2.jpg" alt="">
+                            </div>
+                            <div class="testimonial__author__text">
+                                <h5>Krista Attorn</h5>
+                                <span>Web Developpeur</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="testimonial__item">
+                        <div class="testimonial__text">
+                            <p>Je suis devenue web dev grace au CF2m.</p>
+                        </div>
+                        <div class="testimonial__author">
+                            <div class="testimonial__author__pic">
+                                <img src="img/testimonial/ta-3.jpg" alt="">
+                            </div>
+                            <div class="testimonial__author__text">
+                                <h5>Krista Attorn</h5>
+                                <span>Web Designer</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="testimonial__item">
+                        <div class="testimonial__text">
+                            <p>Delivers such a great service that it can benefit all kinds of people from any number
+                                of industries.</p>
+                        </div>
+                        <div class="testimonial__author">
+                            <div class="testimonial__author__pic">
+                                <img src="img/testimonial/ta-1.jpg" alt="">
+                            </div>
+                            <div class="testimonial__author__text">
+                                <h5>Krista Attorn</h5>
+                                <span>Web Designer</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="testimonial__item">
+                        <div class="testimonial__text">
+                            <p>Videographer delivers such a great service that it can benefit all kinds of people
+                                from any number.</p>
+                        </div>
+                        <div class="testimonial__author">
+                            <div class="testimonial__author__pic">
+                                <img src="img/testimonial/ta-2.jpg" alt="">
+                            </div>
+                            <div class="testimonial__author__text">
+                                <h5>Krista Attorn</h5>
+                                <span>Web Designer</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Testimonial Section End -->
 {% endblock %}
