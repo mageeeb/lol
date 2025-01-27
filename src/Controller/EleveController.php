@@ -65,14 +65,24 @@ class EleveController extends AbstractController
     //------
 
     // Méthode pour afficher un élève spécifique
+//    #[Route('/eleve/{id}', name: 'eleve_show', requirements: ['id' => '\d+'])]
+//    public function show(Eleve $eleve): Response
+//    {
+//        return $this->render('eleve/show.html.twig', [
+//            'eleve' => $eleve,
+//        ]);
+//
+//    }
+
     #[Route('/eleve/{id}', name: 'eleve_show', requirements: ['id' => '\d+'])]
     public function show(Eleve $eleve): Response
     {
         return $this->render('eleve/show.html.twig', [
             'eleve' => $eleve,
+            'notes' => $eleve->getNotes(), // Récupère les notes associées à cet élève
         ]);
-
     }
+
     //----------------
     #[Route('/eleve/{id}/notes', name: 'note_list', methods: ['GET'])]
     public function listNotes(

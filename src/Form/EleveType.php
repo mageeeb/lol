@@ -110,28 +110,7 @@ class EleveType extends AbstractType
                 'placeholder' => 'Sélectionnez une matière',
                 'required' => false,      // Facultatif si la jointure est nullable
             ])
-//
-//            ->add('notes', CollectionType::class, [
-//                'entry_type' => NoteType::class,
-//                'allow_add' => true,
-//                'allow_delete' => true,
-//                'by_reference' => false,
-//                'prototype' => true,
-//                'attr' => [
-//                    'class' => 'notes-collection'
-//                ]
-//            ])
-//            ->add('notes', CollectionType::class, [
-//                'entry_type' => NoteType::class,    // Un formulaire spécifique pour gérer `Note`
-//                'allow_add' => true,               // Autorise l’ajout de nouvelles notes
-//                'allow_delete' => true,            // Autorise la suppression des notes
-//                'by_reference' => false,           // Important pour les relations OneToMany
-//            ])
-//
-//            ->add('save', SubmitType::class, [
-//                'label' => 'Enregistrer',
-//                'attr' => ['class' => 'btn btn-primary']
-//            ])
+
             ->add('notes', CollectionType::class, [
                 'entry_type' => NoteType::class, // Utilise NoteType pour chaque élément de la collection
                 'allow_add' => true, // Autoriser l'ajout dynamique d'éléments

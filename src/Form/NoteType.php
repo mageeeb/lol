@@ -39,28 +39,3 @@ class NoteType extends AbstractType
         ]);
     }
 }
-
-//class NoteType extends AbstractType
-//{
-//    public function buildForm(FormBuilderInterface $builder, array $options): void
-//    {
-//        $builder
-//            ->add('matiere', EntityType::class, [
-//                'class' => Matiere::class, // Spécifie la classe associée
-//                'choice_label' => 'nom', // Utilise la propriété 'nom' de Matiere comme label dans le formulaire
-//                'placeholder' => 'Sélectionnez une matière', // Ajoute un choix vide par défaut
-//                'label' => 'Matière', // Libellé du champ
-//            ])
-//            ->add('note', NumberType::class, [
-//                'label' => 'Note',
-//                'attr' => ['min' => 0, 'max' => 20],
-//            ]);
-//    }
-//
-//    public function configureOptions(OptionsResolver $resolver): void
-//    {
-//        $resolver->setDefaults([
-//            'data_class' => Note::class, // Le formulaire est lié à l'entité Note
-//        ]);
-//    }
-//}
