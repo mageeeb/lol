@@ -1,6 +1,8 @@
 {# templates/eleve/new.html.twig #}
 
 {% extends 'base.html.twig' %}
+{% set exclude_temoignage = true %}
+{% set exclude_teams = true %}
 
 {% block title %}Ajouter un élève{% endblock %}
 
@@ -64,7 +66,10 @@
                         {{ form_row(form.save, {'label': 'Enregistrer'}) }}
                     </div>
 
-                    {{ form_rest(form) }}
+{#                    {{ form_rest(form) }}#}
+                    {# Supprimez les champs que vous ne voulez pas afficher explicitement #}
+                    {{ form_rest(form, { exclude: ['notes'] }) }}
+
                     {{ form_end(form) }}
                 </div>
             </div>
