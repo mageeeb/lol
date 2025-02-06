@@ -135,51 +135,99 @@ class EleveController extends AbstractController
         return $response;
     }
 
+//    #[Route('/eleve/new', name: 'eleve_new', methods: ['GET', 'POST'])]
+//    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+//    {
+//        $eleve = new Eleve();
+//        $form = $this->createForm(EleveType::class, $eleve);
+//        $form->handleRequest($request); // Gère la soumission du formulaire
+//
+//        // Vérification des erreurs si le formulaire n'est pas valide
+//        if ($form->isSubmitted() && !$form->isValid()) {
+//            foreach ($form->getErrors(true, false) as $error) {
+//                dump($error->getMessage()); // Utilisé pour debug (à retirer en prod)
+//            }
+//            $this->addFlash('error', 'Le formulaire contient des erreurs.');
+//        }
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            // Gestion de l'upload de l'avatar
+//            $avatarFile = $form->get('avatar')->getData();
+//            if ($avatarFile) {
+//                // Traitement du fichier uploadé
+//                $originalFilename = pathinfo($avatarFile->getClientOriginalName(), PATHINFO_FILENAME);
+//                $safeFilename = $slugger->slug($originalFilename); // Nettoie le nom du fichier
+//                $newFilename = $safeFilename . '-' . uniqid() . '.' . $avatarFile->guessExtension();
+//
+//                try {
+//                    // Déplacement du fichier dans le dossier configuré
+//                    $avatarFile->move(
+//                        $this->getParameter('avatars_directory'),
+//                        $newFilename
+//                    );
+//
+//                    // Enregistrer le nom du fichier dans la propriété `avatar` de l'entité
+//                    $eleve->setAvatar($newFilename);
+//                } catch (FileException $e) {
+//                    $this->addFlash('error', 'Erreur lors de l\'upload de la photo.');
+//                    return $this->redirectToRoute('eleve_new'); // Retour au formulaire
+//                }
+//            }
+//
+//            // Persister l'entité après traitement
+//            $entityManager->persist($eleve);
+//            $entityManager->flush();
+//
+//            $this->addFlash('success', 'L\'élève a été ajouté avec succès.');
+//            return $this->redirectToRoute('eleve_list'); // Redirection vers une autre page
+//        }
+//
+//        return $this->render('eleve/new.html.twig', [
+//            'form' => $form->createView(),
+//        ]);
+//    }
     #[Route('/eleve/new', name: 'eleve_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $eleve = new Eleve();
         $form = $this->createForm(EleveType::class, $eleve);
-        $form->handleRequest($request); // Gère la soumission du formulaire
+        $form->handleRequest($request);
 
-        // Vérification des erreurs si le formulaire n'est pas valide
-        if ($form->isSubmitted() && !$form->isValid()) {
-            foreach ($form->getErrors(true, false) as $error) {
-                dump($error->getMessage()); // Utilisé pour debug (à retirer en prod)
-            }
-            $this->addFlash('error', 'Le formulaire contient des erreurs.');
-        }
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Gestion de l'upload de l'avatar
-            $avatarFile = $form->get('avatar')->getData();
-            if ($avatarFile) {
-                // Traitement du fichier uploadé
-                $originalFilename = pathinfo($avatarFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFilename); // Nettoie le nom du fichier
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $avatarFile->guessExtension();
-
-                try {
-                    // Déplacement du fichier dans le dossier configuré
-                    $avatarFile->move(
-                        $this->getParameter('avatars_directory'),
-                        $newFilename
-                    );
-
-                    // Enregistrer le nom du fichier dans la propriété `avatar` de l'entité
-                    $eleve->setAvatar($newFilename);
-                } catch (FileException $e) {
-                    $this->addFlash('error', 'Erreur lors de l\'upload de la photo.');
-                    return $this->redirectToRoute('eleve_new'); // Retour au formulaire
+        if ($form->isSubmitted()) {
+            if (!$form->isValid()) {
+                foreach ($form->getErrors(true, false) as $error) {
+                    dump($error->getMessage()); // Capture toutes les erreurs pour debug
                 }
+                $this->addFlash('error', 'Le formulaire contient des erreurs.');
             }
 
-            // Persister l'entité après traitement
-            $entityManager->persist($eleve);
-            $entityManager->flush();
+            if ($form->isValid()) {
+                // Gestion des uploads
+                $avatarFile = $form->get('avatar')->getData();
+                if ($avatarFile) {
+                    $originalFilename = pathinfo($avatarFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $avatarFile->guessExtension();
 
-            $this->addFlash('success', 'L\'élève a été ajouté avec succès.');
-            return $this->redirectToRoute('eleve_list'); // Redirection vers une autre page
+                    try {
+                        $avatarFile->move(
+                            $this->getParameter('avatars_directory'),
+                            $newFilename
+                        );
+                        $eleve->setAvatar($newFilename);
+                    } catch (FileException $e) {
+                        $this->addFlash('error', 'Erreur lors de l\'upload de la photo.');
+                        return $this->redirectToRoute('eleve_new');
+                    }
+                }
+
+                // Sauvegarde dans la BDD
+                $entityManager->persist($eleve);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'L\'élève a été ajouté avec succès.');
+                return $this->redirectToRoute('eleve_list');
+            }
         }
 
         return $this->render('eleve/new.html.twig', [
