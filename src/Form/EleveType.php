@@ -89,21 +89,6 @@ class EleveType extends AbstractType
                 'label' => 'Enregistrer',
                 'attr' => ['class' => 'btn btn-primary']
             ])
-//            ->add('avatar', FileType::class, [
-//                'mapped' => false,
-//                'required' => false,
-//                'label' => 'Photo de profil',
-//                'constraints' => [
-//                    new Assert\File([
-//                        'maxSize' => '2M', // Limite la taille à 2 Mo
-//                        'mimeTypes' => [
-//                            'image/jpeg',
-//                            'image/png',
-//                        ],
-//                        'mimeTypesMessage' => 'Veuillez uploader une image au format valide (JPEG/PNG).',
-//                    ])
-//                ],
-//            ])
             ->add('avatar', FileType::class, [
                 'mapped' => false,
                 'required' => false,
