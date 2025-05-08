@@ -18,7 +18,8 @@
 
             <div class="card shadow-sm">
                 <div class="card-body">
-                    {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+{#                    {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}#}
+                    {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate', 'enctype': 'multipart/form-data'}}) }}
                     {{ form_errors(form) }}
 
                     <div class="row">
@@ -57,9 +58,12 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-12 mb-3">
+{#                        <div class="col-md-12 mb-3">#}
 {#                            {{ form_row(form.avatar, {'label': 'Photo de profil', 'attr': {'class': 'form-control'}}) }}#}
-                            {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate', 'enctype': 'multipart/form-data'}}) }}
+{#                            {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate', 'enctype': 'multipart/form-data'}}) }}#}
+{#                        </div>#}
+                        <div class="col-md-12 mb-3">
+                            {{ form_row(form.avatar, {'label': 'Photo de profil', 'attr': {'class': 'form-control'}}) }}
                         </div>
                     </div>
 
