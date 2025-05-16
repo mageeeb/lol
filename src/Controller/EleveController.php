@@ -70,9 +70,64 @@ class EleveController extends AbstractController
     #[Route('/eleve/{id}', name: 'eleve_show', requirements: ['id' => '\d+'])]
     public function show(Eleve $eleve): Response
     {
+        $notes = $eleve->getNotes(); // Récupère les notes associées à cet élève
+
+        // Grouper les notes par matière
+        $notesByMatiere = [];
+        foreach ($notes as $note) {
+            $matiereId = $note->getMatiere()->getId();
+            $matiereName = $note->getMatiere()->getNom();
+
+            if (!isset($notesByMatiere[$matiereId])) {
+                $notesByMatiere[$matiereId] = [
+                    'nom' => $matiereName,
+                    'notes' => [],
+                    'moyenne' => 0
+                ];
+            }
+
+            $notesByMatiere[$matiereId]['notes'][] = $note->getNote();
+        }
+
+        // Calculer la moyenne pour chaque matière
+        $allNotes = [];
+        foreach ($notesByMatiere as $matiereId => &$matiereData) {
+            if (count($matiereData['notes']) > 0) {
+                // Calculer la moyenne et s'assurer qu'elle est sur 20
+                $moyenne = array_sum($matiereData['notes']) / count($matiereData['notes']);
+                // Si les notes ne sont pas déjà sur 20, on pourrait ajouter une conversion ici
+                $matiereData['moyenne'] = $moyenne;
+
+                // Ajouter toutes les notes pour calculer la moyenne générale
+                $allNotes = array_merge($allNotes, $matiereData['notes']);
+            }
+        }
+
+        // Calculer la moyenne générale
+        $moyenneGenerale = 0;
+        if (count($allNotes) > 0) {
+            $moyenneGenerale = array_sum($allNotes) / count($allNotes);
+        }
+
+        // Calculer également la moyenne des moyennes par matière (pondération égale par matière)
+        $moyenneParMatiere = 0;
+        $nbMatieresAvecNotes = 0;
+        foreach ($notesByMatiere as $matiereData) {
+            if (isset($matiereData['moyenne']) && $matiereData['moyenne'] > 0) {
+                $moyenneParMatiere += $matiereData['moyenne'];
+                $nbMatieresAvecNotes++;
+            }
+        }
+        if ($nbMatieresAvecNotes > 0) {
+            $moyenneParMatiere = $moyenneParMatiere / $nbMatieresAvecNotes;
+        }
+
         return $this->render('eleve/show.html.twig', [
             'eleve' => $eleve,
-            'notes' => $eleve->getNotes(), // Récupère les notes associées à cet élève
+            'notes' => $notes,
+            'notesByMatiere' => $notesByMatiere,
+            'moyenneGenerale' => $moyenneGenerale,
+            'moyenneParMatiere' => $moyenneParMatiere
         ]);
     }
 
