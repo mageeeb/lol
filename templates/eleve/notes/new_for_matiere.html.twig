@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+{% set exclude_temoignage = true %}
+{% set exclude_teams = true %}
+
+{% block title %}Ajouter une Note pour {{ matiere.nom }}{% endblock %}
+
+{% block body %}
+<section class="about spad">
+    <div class="container mt-5">
+        <h1>Ajouter une note en {{ matiere.nom }} pour {{ eleve.prenom }} {{ eleve.nom }}</h1>
+
+        {{ form_start(form) }}
+            <div class="form-group mt-3">
+                {{ form_label(form.note) }}
+                {{ form_widget(form.note, { 'attr': {'class': 'form-control', 'placeholder': 'Entrez la note'} }) }}
+                {{ form_errors(form.note) }}
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-4">Enregistrer</button>
+            <a href="{{ path('eleve_show', {'id': eleve.id}) }}" class="btn btn-secondary mt-4 ml-2">Annuler</a>
+        {{ form_end(form) }}
+    </div>
+</section>
+{% endblock %}

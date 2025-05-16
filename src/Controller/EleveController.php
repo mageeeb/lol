@@ -64,6 +64,51 @@ class EleveController extends AbstractController
             'eleve' => $eleve, // Passe l'objet eleve à la vue
         ]);
     }
+
+    #[Route('/eleve/{id}/notes/new/{matiere_id}', name: 'note_new_for_matiere', methods: ['GET', 'POST'])]
+    public function addNoteForMatiere(
+        Eleve $eleve,
+        int $matiere_id,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response {
+        // Récupérer la matière spécifiée
+        $matiere = $entityManager->getRepository(\App\Entity\Matiere::class)->find($matiere_id);
+
+        if (!$matiere) {
+            throw $this->createNotFoundException('La matière demandée n\'existe pas.');
+        }
+
+        $note = new \App\Entity\Note(); // Crée une nouvelle instance de Note
+        $note->setEleve($eleve); // Associe la note à l'élève spécifique
+        $note->setMatiere($matiere); // Pré-sélectionne la matière
+
+        // Créer un formulaire sans le champ matière
+        $form = $this->createFormBuilder($note)
+            ->add('note', \Symfony\Component\Form\Extension\Core\Type\NumberType::class, [
+                'label' => 'Note',
+                'required' => true,
+                'attr' => ['min' => 0, 'max' => 20],
+            ])
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($note); // Enregistre la nouvelle note
+            $entityManager->flush();
+
+            $this->addFlash('success', 'La note a été ajoutée avec succès pour la matière ' . $matiere->getNom());
+
+            return $this->redirectToRoute('eleve_show', ['id' => $eleve->getId()]);
+        }
+
+        return $this->render('eleve/notes/new_for_matiere.html.twig', [
+            'form' => $form->createView(),
+            'eleve' => $eleve,
+            'matiere' => $matiere,
+        ]);
+    }
     //------
 
 
@@ -72,62 +117,55 @@ class EleveController extends AbstractController
     {
         $notes = $eleve->getNotes(); // Récupère les notes associées à cet élève
 
-        // Grouper les notes par matière
-        $notesByMatiere = [];
+        // Calculer la moyenne par matière
+        $moyennesParMatiere = [];
+        $notesParMatiere = [];
+
+        // Variables pour calculer la moyenne globale
+        $totalGlobal = 0;
+        $countGlobal = 0;
+
+        // Regrouper les notes par matière
         foreach ($notes as $note) {
             $matiereId = $note->getMatiere()->getId();
-            $matiereName = $note->getMatiere()->getNom();
+            $matiereNom = $note->getMatiere()->getNom();
 
-            if (!isset($notesByMatiere[$matiereId])) {
-                $notesByMatiere[$matiereId] = [
-                    'nom' => $matiereName,
+            if (!isset($notesParMatiere[$matiereId])) {
+                $notesParMatiere[$matiereId] = [
+                    'nom' => $matiereNom,
                     'notes' => [],
-                    'moyenne' => 0
+                    'total' => 0,
+                    'count' => 0
                 ];
             }
 
-            $notesByMatiere[$matiereId]['notes'][] = $note->getNote();
+            $notesParMatiere[$matiereId]['notes'][] = $note;
+            $notesParMatiere[$matiereId]['total'] += $note->getNote();
+            $notesParMatiere[$matiereId]['count']++;
+
+            // Ajouter au total global
+            $totalGlobal += $note->getNote();
+            $countGlobal++;
         }
 
         // Calculer la moyenne pour chaque matière
-        $allNotes = [];
-        foreach ($notesByMatiere as $matiereId => &$matiereData) {
-            if (count($matiereData['notes']) > 0) {
-                // Calculer la moyenne et s'assurer qu'elle est sur 20
-                $moyenne = array_sum($matiereData['notes']) / count($matiereData['notes']);
-                // Si les notes ne sont pas déjà sur 20, on pourrait ajouter une conversion ici
-                $matiereData['moyenne'] = $moyenne;
-
-                // Ajouter toutes les notes pour calculer la moyenne générale
-                $allNotes = array_merge($allNotes, $matiereData['notes']);
-            }
+        foreach ($notesParMatiere as $matiereId => $data) {
+            $moyenne = $data['count'] > 0 ? $data['total'] / $data['count'] : 0;
+            $moyennesParMatiere[$matiereId] = [
+                'nom' => $data['nom'],
+                'moyenne' => round($moyenne, 2),
+                'notes' => $data['notes']
+            ];
         }
 
-        // Calculer la moyenne générale
-        $moyenneGenerale = 0;
-        if (count($allNotes) > 0) {
-            $moyenneGenerale = array_sum($allNotes) / count($allNotes);
-        }
-
-        // Calculer également la moyenne des moyennes par matière (pondération égale par matière)
-        $moyenneParMatiere = 0;
-        $nbMatieresAvecNotes = 0;
-        foreach ($notesByMatiere as $matiereData) {
-            if (isset($matiereData['moyenne']) && $matiereData['moyenne'] > 0) {
-                $moyenneParMatiere += $matiereData['moyenne'];
-                $nbMatieresAvecNotes++;
-            }
-        }
-        if ($nbMatieresAvecNotes > 0) {
-            $moyenneParMatiere = $moyenneParMatiere / $nbMatieresAvecNotes;
-        }
+        // Calculer la moyenne globale
+        $moyenneGlobale = $countGlobal > 0 ? round($totalGlobal / $countGlobal, 2) : 0;
 
         return $this->render('eleve/show.html.twig', [
             'eleve' => $eleve,
             'notes' => $notes,
-            'notesByMatiere' => $notesByMatiere,
-            'moyenneGenerale' => $moyenneGenerale,
-            'moyenneParMatiere' => $moyenneParMatiere
+            'moyennesParMatiere' => $moyennesParMatiere,
+            'moyenneGlobale' => $moyenneGlobale
         ]);
     }
 
